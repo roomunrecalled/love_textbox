@@ -17,9 +17,10 @@ local LARGE_FONT_PADDING = {left = 8, top = 4, bottom = 5, right = 4}
 
 local BORDER_PATH = "assets/graphics/textbox_border.png"
 
-local SMASH_SFX_PATH = "assets/sound"
-local QUESTION_SFX_PATH = "assets/sound"
-local BEEP_SFX_PATH = "assets/sound"
+local EXCLAMATION_SFX_PATH = "assets/sound/xenonn__layered_gunshot-9.wav"
+local QUESTION_SFX_PATH = "assets/sound/jack-urbanski__vibraphone-chord.wav"
+local LIGHTBULB_SFX_PATH = "assets/sound/stavsounds__correct2.wav"
+local TEXT_SFX_PATH = "assets/sound/yottasounds__typewriter-single-key-type.wav"
 
 local SCREEN_HEIGHT = 144
 local SCREEN_WIDTH = 192
