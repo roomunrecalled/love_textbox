@@ -8,11 +8,11 @@ end
 
 function love.update(dt)
 
-	if (textbox:queue_length() < 1) then
+	if (textbox:queue_length() < 1 and love.keyboard.isDown("space")) then
 		print("queuing()")
 		textbox:queue({"test", "line"}, {small_text=true, line_speed=3, line_pause=3})
 	end
-	textbox:run(dt,false)
+	textbox:run(dt,love.keyboard.isDown("space"))
 
 	require("lovebird").update()
 end
@@ -26,7 +26,10 @@ function love.draw()
 	love.graphics.print(love.graphics.getFont():getHeight() * love.graphics.getFont():getLineHeight(), 80, 60)
 	love.graphics.draw(image,10,64)
 	]]
+	love.graphics.setCanvas(canvas)
+	love.graphics.clear()
 	textbox:draw(canvas)
 
+	love.graphics.setCanvas()
 	love.graphics.draw(canvas, 0, 0, 0, 4, 4)
 end

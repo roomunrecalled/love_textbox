@@ -17,10 +17,9 @@ local LARGE_FONT_PADDING = {left = 8, top = 4, bottom = 5, right = 4}
 
 local BORDER_PATH = "assets/graphics/textbox_border.png"
 
--- Sound effects are specified by '#!<symbol><pitch>
--- pitch is from 1 to 5; defaults to 3
+-- Sound effects are specified by '#!<symbol>
 -- #!!
-local EXCLAMATION_SFX_PATH = "assets/sound/xenonn__layered_gunshot-9-edited.wav"
+local EXCLAMATION_SFX_PATH = "assets/sound/xenonn__layered-gunshot-9-edited.wav"
 -- #!?
 local QUESTION_SFX_PATH = "assets/sound/jack-urbanski__vibraphone-chord-truncated.wav"
 -- #!=
@@ -28,9 +27,9 @@ local LIGHTBULB_SFX_PATH = "assets/sound/stavsounds__correct2.wav"
 -- #!*
 local CHIME_SFX_PATH = "assets/sound/mamamucodes__gluckdlow.wav"
 -- #!-
-local TEXT_SFX_PATH = "assets/sound/yottasounds__typewriter-single-key-type.wav"
+local TEXT_SFX_PATH = "assets/sound/yottasounds__typewriter-single-key-type-3.wav"
 -- #!_
-local ADVANCE_SFX_PATH = "assets/sound/yottasounds__typewriter-single-key-type.wav"
+local ADVANCE_SFX_PATH = "assets/sound/yottasounds__typewriter-single-key-type-3.wav"
 
 local SCREEN_HEIGHT = 144
 local SCREEN_WIDTH = 192
@@ -45,12 +44,14 @@ local tb__ = {
 	queue__ = {},
 }
 
+
 tb__.TextboxString = {
 	colored_text = {},
 	line_speed = 3,
 	line_pause = 3,
 	screen_shake = false,
-	screen_flash = false
+	screen_flash = false,
+	sound = nil
 }
 function tb__.TextboxString:new(string, options)
 	options = options or {}
@@ -84,6 +85,14 @@ tb__.Textbox = {
 	font = {
 		small = love.graphics.newFont(SMALL_FONT_PATH, 10),
 		large = love.graphics.newFont(LARGE_FONT_PATH, 16)
+	},
+	sound = {
+		exclamation = love.audio.newSource(EXCLAMATION_SFX_PATH, "static"),
+		question = love.audio.newSource(QUESTION_SFX_PATH, "static"),
+		lightbulb = love.audio.newSource(LIGHTBULB_SFX_PATH, "static"),
+		chime = love.audio.newSource(CHIME_SFX_PATH, "static"),
+		text = love.audio.newSource(TEXT_SFX_PATH, "static"),
+		advance = love.audio.newSource(ADVANCE_SFX_PATH, "static")
 	},
 	line_speed = 3,
 	line_pause = 3,
@@ -132,17 +141,17 @@ function tb__:run(dt, close_textbox)
 		self.coroutine__ = nil
 		self.current__ = nil
 	end
+	print(self.current__)
 	if not ok then
 		print(message)
 	end
 end
 
-function tb__:draw(canvas)
+function tb__:draw(screencanvas, textcanvas)
 	local current = self.current__
 	local old_color = {love.graphics.getColor()}
 	if current and current.mask then
 		-- draw the textbox
-		love.graphics.setCanvas(canvas)
 		love.graphics.setColor(current.bg_color)
 		love.graphics.rectangle("fill",
 			0,
@@ -184,7 +193,6 @@ function tb__:draw(canvas)
 			love.graphics.setColor(current.text_color[1])
 			love.graphics.circle("line", tb_screen_dim.width - 10, tb_screen_dim.height - 10, 2)
 		end
-		love.graphics.setCanvas()
 	end
 
 	if old_color then
@@ -227,6 +235,12 @@ update_tb__ = function ()
 	local line_speed = LINE_SPEED[current.line_speed]
 	local line_pause = LINE_PAUSE[current.line_pause]
 
+	-- load sounds
+	local text_sound = current.sound.text
+	local ending_sound = current.sound.exclamation
+	text_sound:setVolume(0.5)
+	ending_sound:setVolume(0.5)
+
 	-- preprocess colors
 	local function convertColor(color_table)
 		local result = {}
@@ -247,8 +261,15 @@ update_tb__ = function ()
 	current.mask = text_height * 2
 	while current.mask > text_height do
 		current.mask = current.mask - 1
+		if current.mask == math.floor(text_height * 1.5) then
+			text_sound:stop()
+			text_sound:play()
+		end
 		pause__(line_speed)
 	end
+
+	ending_sound:stop()
+	ending_sound:play()
 
 	pause__(line_pause)
 	if current.line_pause > 3 then
@@ -258,11 +279,18 @@ update_tb__ = function ()
 	if (#current.strings > 1) then
 		while current.mask > 0 do
 			current.mask = current.mask - 1
+			if current.mask == math.floor(text_height * 0.5) then
+				text_sound:stop()
+				text_sound:play()
+			end
 			pause__(line_speed)
 		end
 	end
 
-	pause__(9)
+	ending_sound:stop()
+	ending_sound:play()
+
+	pause__(16)
 	current.completed = true
 
 	while not tb_close do
@@ -270,6 +298,8 @@ update_tb__ = function ()
 	end
 
 	pause__(2)
+
+	current.sound.advance:play()
 end
 
 return tb__
