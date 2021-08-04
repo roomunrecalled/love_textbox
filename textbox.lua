@@ -17,8 +17,10 @@ local LARGE_FONT_PADDING = {left = 8, top = 4, bottom = 5, right = 4}
 
 local BORDER_PATH = "assets/graphics/textbox_border.png"
 
+-- Sound effects are specified by '#!<symbol><pitch>
+-- pitch is from 1 to 5; defaults to 3
 -- #!!
-local EXCLAMATION_SFX_PATH = "assets/sound/xenonn__layered_gunshot-9.wav"
+local EXCLAMATION_SFX_PATH = "assets/sound/xenonn__layered_gunshot-9-edited.wav"
 -- #!?
 local QUESTION_SFX_PATH = "assets/sound/jack-urbanski__vibraphone-chord-truncated.wav"
 -- #!=

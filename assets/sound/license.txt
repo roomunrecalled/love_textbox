@@ -1,10 +1,10 @@
 correct2 is from stavsounds (CC0)
 https://freesound.org/people/StavSounds/sounds/546082/
 
-layered-gunshot-9 is from xenonn (CC0)
+original layered-gunshot-9 is from xenonn (CC0); has been edited
 https://freesound.org/people/Xenonn/sounds/128301/
 
-original vibraphone-chord is from jack_urbanski (CC0); has been truncated
+original vibraphone-chord is from jack_urbanski (CC0); has been edited
 https://freesound.org/people/jack_urbanski/sounds/495674/
 
 typewriter-single-key-type-3 is from yottasounds (CC0)
