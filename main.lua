@@ -4,13 +4,16 @@ local canvas
 function love.load()
 	love.graphics.setDefaultFilter("nearest", "nearest")
 	canvas = love.graphics.newCanvas(192,144)
+	textbox:init()
 end
 
 function love.update(dt)
 
 	if (textbox:queue_length() < 1 and love.keyboard.isDown("space")) then
 		print("queuing()")
-		textbox:queue({"test", "line"}, {small_text=true, line_speed=3, line_pause=3})
+		textbox:queue(
+			{"Samuel Beechworth went to sea to", "forget. He wasn't the first, but he..."},
+			{small_text=false, line_speed=3, line_pause=3})
 	end
 	textbox:run(dt,love.keyboard.isDown("space"))
 
